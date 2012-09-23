@@ -1,19 +1,19 @@
-pyIOIOWebsockets
+pyIOIOWebsockets oneoffs
 
 This is a collection of libraries and applications designed to provide access to an IOIO device via websocket connections - allowing not only access via standalone applications, but also from within a web browser itself[which is normally sandboxed and not allowed to access hardware devices such as serial ports, usb devices, or bluetooth connections]
 
-Applications that run on the IOIO host provide a websocket connection[client or server] which is tied to the IOIO communication stream[typically the com port].
+Packages:
+**echoWebsocket**
+Doesn't do anything with IOIO, simply runs a websocket server on port 9000 that will echo a message back to the client
+echoWebsocket.py -- python websocket server using twisted and autobahn, port set in sourcecode
+echoWebsocketClient.html -- html/javascript page to connect to websocket server and send a message
 
-These applications can provide one of 2 protocols:
-raw or websocket-ioio.   A raw protocol is just that, it takes whetever traffic it receives from the websocket and passes it to the ioio - if the data is invalid or corrupted this can lead to the IOIO being in a hung state waiting for the rest of a command that will never come.  The only way to recover is to reset the connection to the IOIO.
+**ioioConsole**
+ioioConsole.py -- ugly miniterm hack to verify that python can communicate with the ioio.  Since it treats input as text, not much you can do with it.  Ctr+T for the menu, followed by a lowercase l to turn on the led, and a lowerface f to turn it off
 
-The websocket-ioio protocol will be a much more intelligent protocol, where the host application must check the command for validity and only send sane commands to the client.  By the same token it must provide feedback the sending application on if the command was invalid or valid, and when the command is executed.
-
-Directory structure:
-oneoffs: simple little apps created for learning and left for instructional notes
-websocketApps: HTML5 websocket applications
-websocketClients: daemons which bridge a host ioio device to a remote websocket server
-websocketServers: daemons which bridge a host ioio device to a remote websocket client
+**ioioWebsocket**
+IOIOwebsocket.py  -- ugly miniterm and echoWebsocket hack to link a websocket client to the ioio.  Hardcoded to use com port 4 for the ioio and port 9001 for the socket
+ioioWebsocketClient.html -- 2 simple buttons, after connecting press led on to turn on the led, led off to turn it off
 
 Python applicationa use a number of add on modules:
   pyserial: http://pyserial.sourceforge.net/
@@ -24,5 +24,6 @@ Of specific note for developers is the pyserial module.  When installed, it will
 pyBusPirateLite and pyBusPirateLite1:  controls a buspirate microprocessor programmer via a serial connection.  This includes programatic access to i2c and spi - 2 protocols that the IOIO also allows access to.  Change the commands to match and you can write python applications to use i2c.
 oscope_v1.2.py:
 
+Also refer to rfc
 Attatches to some sort of microcontoller via the serial connection and starts reading the adc and charts the values.  Just needs a small ammount of changes in commands to accomodate the IOIO protocol.
 
